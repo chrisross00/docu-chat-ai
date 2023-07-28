@@ -103,7 +103,7 @@ preprocessed_data_file = './preprocessed_data.pkl'
 if os.path.exists(preprocessed_data_file):
     # Load preprocessed data from file
     with open(preprocessed_data_file, 'rb') as f:
-        contexts, questions, answers = load_squad_data('../train-v1.1.json') # this might be wrong and need to be removed
+        contexts, questions, answers = load_squad_data('../train-v1.1.json')
         preprocessed_contexts, preprocessed_questions, answers = pickle.load(f)
 else:
     # Replace 'train-v1.1.json' with the path to your SQuAD data file
@@ -206,20 +206,20 @@ for epoch in range(0, epochs):
 
 print('Training complete!')
 
-## generating predictions -- may need to move
-# Create a QuestionAnsweringPipeline
-nlp = pipeline('question-answering', model=model, tokenizer=tokenizer)
+# ## generating predictions -- may need to move
+# # Create a QuestionAnsweringPipeline
+# nlp = pipeline('question-answering', model=model, tokenizer=tokenizer)
 
-# Define a question and a context
-question = 'What is the capital of France?'
-context = 'Paris is the capital of France.'
+# # Define a question and a context
+# question = 'What is the capital of France?'
+# context = 'Paris is the capital of France.'
 
-# Generate a prediction
-output = nlp({
-    'question': question,
-    'context': context
-})
+# # Generate a prediction
+# output = nlp({
+#     'question': question,
+#     'context': context
+# })
 
-print(f"Answer: '{output['answer']}', score: {output['score']}, start: {output['start']}, end: {output['end']}")
+# print(f"Answer: '{output['answer']}', score: {output['score']}, start: {output['start']}, end: {output['end']}")
 
-# Repeat this for all questions in your test set and store the predictions
+# # Repeat this for all questions in your test set and store the predictions

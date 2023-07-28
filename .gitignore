@@ -1,2 +1,3 @@
 "env/" 
 "preprocessed_data.pkl"
+"model.pth"
