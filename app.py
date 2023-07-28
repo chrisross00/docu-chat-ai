@@ -24,7 +24,7 @@ else:
     model = AutoModelForQuestionAnswering.from_pretrained(model_name)
 
 # Specify the path to your saved model
-model_path = "model.pth"
+model_path = "../model.pth"
 
 # Load the state dict of your saved model
 model.load_state_dict(torch.load(model_path))

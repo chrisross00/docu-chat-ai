@@ -212,6 +212,6 @@ for epoch in range(0, epochs):
     # Store the loss value for plotting the learning curve
     loss_values.append(avg_train_loss)
     # Save the model 
-    torch.save(model.state_dict(), 'model.pth')
+    torch.save(model.state_dict(), '../model.pth')
 
 print('Training complete!')
