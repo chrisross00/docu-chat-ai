@@ -205,21 +205,3 @@ for epoch in range(0, epochs):
     torch.save(model.state_dict(), 'model.pth')
 
 print('Training complete!')
-
-# ## generating predictions -- may need to move
-# # Create a QuestionAnsweringPipeline
-# nlp = pipeline('question-answering', model=model, tokenizer=tokenizer)
-
-# # Define a question and a context
-# question = 'What is the capital of France?'
-# context = 'Paris is the capital of France.'
-
-# # Generate a prediction
-# output = nlp({
-#     'question': question,
-#     'context': context
-# })
-
-# print(f"Answer: '{output['answer']}', score: {output['score']}, start: {output['start']}, end: {output['end']}")
-
-# # Repeat this for all questions in your test set and store the predictions
