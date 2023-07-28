@@ -6,9 +6,7 @@ import string
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
-from transformers import BertTokenizer
-from transformers import BertForQuestionAnswering
-from transformers import AdamW
+from transformers import BertForQuestionAnswering, BertTokenizer, RobertaForQuestionAnswering, RobertaTokenizer
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 from transformers import pipeline
@@ -83,7 +81,7 @@ def encode_data(tokenizer, questions, passages, max_length):
             passage, 
             max_length=max_length, 
             padding='max_length', 
-            truncation='only_second', 
+            truncation='longest_first', 
             return_attention_mask=True
         )
         input_ids.append(encoded_data['input_ids'])
@@ -115,8 +113,23 @@ else:
         pickle.dump((preprocessed_contexts, preprocessed_questions, answers), f)
 
 
-# Load the BERT tokenizer
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+# Load the configuration file
+with open('config.json') as f:
+    config = json.load(f)
+
+# Get the model name from the config
+model_name = config['model_name']
+print(model_name)
+
+# Check the model type and load the appropriate model and tokenizer
+if model_name == 'bert-base-uncased':
+    tokenizer = BertTokenizer.from_pretrained(model_name)
+    model = BertForQuestionAnswering.from_pretrained(model_name)
+elif model_name == 'roberta-base':
+    tokenizer = RobertaTokenizer.from_pretrained(model_name)
+    model = RobertaForQuestionAnswering.from_pretrained(model_name)
+else:
+    raise ValueError(f'Unsupported model type for name: {model_name}')
 
 # Encode the data
 max_seq_length = 256  # choose a maximum sequence length that fits your memory constraints
@@ -136,11 +149,8 @@ end_positions = torch.tensor(end_positions)
 dataset = TensorDataset(input_ids, attention_masks, start_positions, end_positions)
 train_dataloader = DataLoader(dataset, batch_size=16)  # adjust batch size as needed
 
-# Load the BERT model
-model = BertForQuestionAnswering.from_pretrained('bert-base-uncased')
-
 # Define the optimizer
-optimizer = AdamW(model.parameters(), lr=1e-5)  # You can adjust the learning rate
+optimizer = torch.optim.AdamW(model.parameters(), lr=1e-5)  # You can adjust the learning rate
 
 # Define the number of training epochs
 epochs = 3
